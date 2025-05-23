@@ -1,0 +1,101 @@
+Generic, single-database configuration.
+
+This is the README file for the Alembic migrations directory. This directory contains
+all the database migrations for the Ontario Driving School Manager application.
+
+## Directory Structure
+
+- `versions/`: Contains all migration scripts
+- `env.py`: The migration environment
+- `script.py.mako`: Template for new migration scripts
+
+## Migration Commands
+
+### Creating a New Migration
+
+```bash
+# Create a new migration with auto-generated changes
+alembic revision --autogenerate -m "Description of changes"
+
+# Create an empty migration
+alembic revision -m "Description of changes"
+```
+
+### Applying Migrations
+
+```bash
+# Apply all pending migrations
+alembic upgrade head
+
+# Apply next migration
+alembic upgrade +1
+
+# Downgrade one migration
+alembic downgrade -1
+
+# Downgrade to specific version
+alembic downgrade <revision>
+```
+
+### Migration Status
+
+```bash
+# Show current migration version
+alembic current
+
+# Show migration history
+alembic history
+
+# Show pending migrations
+alembic history --indicate-current
+```
+
+## Best Practices
+
+1. **Always Review Auto-generated Migrations**
+   - Check the generated SQL in the migration file
+   - Verify that all changes are intentional
+   - Test migrations in development before applying to production
+
+2. **Meaningful Migration Names**
+   - Use clear, descriptive names
+   - Include the type of change (add, remove, modify)
+   - Example: "add_student_phone_number"
+
+3. **Atomic Changes**
+   - Each migration should represent one logical change
+   - Keep migrations small and focused
+   - Avoid combining unrelated changes
+
+4. **Testing**
+   - Test both upgrade and downgrade paths
+   - Verify data integrity after migrations
+   - Test with sample data
+
+5. **Version Control**
+   - Commit migration files with related code changes
+   - Never modify existing migration files
+   - Create new migrations for changes to existing ones
+
+## Troubleshooting
+
+1. **Migration Conflicts**
+   - If you get conflicts, create a new migration
+   - Never modify existing migration files
+   - Use `alembic merge` for complex conflicts
+
+2. **Database Connection Issues**
+   - Verify database URL in alembic.ini
+   - Check database permissions
+   - Ensure database server is running
+
+3. **Failed Migrations**
+   - Check the error message
+   - Review the migration file
+   - Test the migration in isolation
+
+## Additional Resources
+
+- [Alembic Documentation](https://alembic.sqlalchemy.org/)
+- [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
+- [Database Migration Best Practices](https://alembic.sqlalchemy.org/en/latest/best_practices.html) 
