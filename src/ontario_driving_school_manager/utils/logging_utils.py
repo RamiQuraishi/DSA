@@ -3,47 +3,39 @@ Logging utilities for the Ontario Driving School Manager.
 """
 
 import logging
+import logging.config
 import sys
 from pathlib import Path
 from typing import Optional
 
+import yaml
+
 def setup_logging(
-    log_file: Optional[str] = None,
-    level: int = logging.INFO,
-    format: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    config_file: Optional[str] = None,
+    default_level: int = logging.INFO
 ) -> None:
     """
-    Set up logging configuration.
+    Set up logging configuration from YAML file.
     
     Args:
-        log_file: Optional path to log file. If None, logs to stdout.
-        level: Logging level (default: INFO)
-        format: Log message format
+        config_file: Path to YAML config file. If None, uses default config.
+        default_level: Default logging level if config file is not found.
     """
-    # Create formatter
-    formatter = logging.Formatter(format)
+    if config_file:
+        config_path = Path(config_file)
+        if config_path.exists():
+            with open(config_path) as f:
+                config = yaml.safe_load(f)
+                logging.config.dictConfig(config)
+                return
 
-    # Create handlers
-    handlers = []
-    
-    # Console handler
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setFormatter(formatter)
-    handlers.append(console_handler)
-
-    # File handler (if log_file specified)
-    if log_file:
-        log_path = Path(log_file)
-        log_path.parent.mkdir(parents=True, exist_ok=True)
-        file_handler = logging.FileHandler(log_file)
-        file_handler.setFormatter(formatter)
-        handlers.append(file_handler)
-
-    # Configure root logger
+    # Fallback to basic configuration if config file not found
     logging.basicConfig(
-        level=level,
-        handlers=handlers,
-        force=True
+        level=default_level,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        handlers=[
+            logging.StreamHandler(sys.stdout)
+        ]
     )
 
     # Set specific logger levels for third-party libraries

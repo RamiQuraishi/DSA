@@ -17,28 +17,53 @@ A comprehensive management system for Ontario driving schools, built with Python
 - Poetry for dependency management
 - Docker (optional, for containerized development)
 
-## Installation
+## Setup
 
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/ontario-driving-school-manager.git
-cd ontario-driving-school-manager
-```
+1. **Install Dependencies**
+   ```bash
+   poetry install
+   ```
 
-2. Install dependencies using Poetry:
-```bash
-poetry install
-```
+2. **Environment Setup**
+   ```bash
+   # Generate .env file from example
+   python scripts/setup_env.py
+   
+   # Edit .env file with your configuration
+   # (Optional) Edit src/ontario_driving_school_manager/config/logging.yaml for logging settings
+   ```
 
-3. Copy the example environment file and configure it:
-```bash
-cp .env.example .env
-```
+3. **Database Setup**
+   ```bash
+   # Initialize database
+   poetry run python -m ontario_driving_school_manager.data.db_setup
+   
+   # Run migrations
+   alembic upgrade head
+   ```
 
-4. Initialize the database:
-```bash
-poetry run alembic upgrade head
-```
+4. **Run Tests**
+   ```bash
+   poetry run pytest
+   ```
+
+## Configuration
+
+### Environment Variables (.env)
+- `DATABASE_URL`: Database connection string
+- `LOG_LEVEL`: Logging level (INFO, DEBUG, etc.)
+- `LOG_FILE`: Path to log file
+- `APP_NAME`: Application name
+- `APP_VERSION`: Application version
+- `APP_ENV`: Environment (development, production)
+- `SECRET_KEY`: Secret key for security
+- `DEBUG`: Debug mode (True/False)
+
+### Logging Configuration (logging.yaml)
+- Console and file logging
+- Separate error log file
+- Configurable log levels and formats
+- Third-party library logging settings
 
 ## Development
 
@@ -52,16 +77,24 @@ poetry shell
 python -m ontario_driving_school_manager
 ```
 
-## Testing
+### Code Style
+- Follow PEP 8 guidelines
+- Use type hints
+- Write docstrings for all functions and classes
 
-Run tests using pytest:
-```bash
-poetry run pytest
-```
+### Testing
+- Write unit tests for new features
+- Run tests before committing
+- Maintain test coverage
+
+### Database Migrations
+- Use Alembic for all database changes
+- Review auto-generated migrations
+- Test migrations before applying
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Contributing
 

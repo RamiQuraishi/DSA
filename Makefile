@@ -1,8 +1,12 @@
-.PHONY: install test lint format clean run
+.PHONY: install test lint format clean run setup-env
 
 # Development commands
 install:
 	poetry install
+
+setup-env:
+	python scripts/generate_env_example.py
+	python scripts/setup_env.py
 
 test:
 	poetry run pytest
