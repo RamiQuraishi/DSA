@@ -15,14 +15,16 @@ class BaseRepository(Generic[ModelType]):
     Base repository class that implements common database operations.
     """
 
-    def __init__(self, model: Type[ModelType]):
+    def __init__(self, model: Type[ModelType], db: Session):
         """
-        Initialize repository with model class.
+        Initialize repository with model class and database session.
         
         Args:
             model: SQLAlchemy model class
+            db: Database session
         """
         self.model = model
+        self.db = db
 
     def get(self, db: Session, id: Any) -> Optional[ModelType]:
         """

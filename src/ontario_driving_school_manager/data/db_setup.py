@@ -9,7 +9,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from ontario_driving_school_manager.config.settings import load_settings
-from ontario_driving_school_manager.data.base import Base
+from ontario_driving_school_manager.models.base import Base
+from ontario_driving_school_manager.models.student import Student  # Import all models here
 
 logger = logging.getLogger(__name__)
 
@@ -32,9 +33,9 @@ def init_db() -> None:
         connect_args={"check_same_thread": False} if database_url.startswith("sqlite") else {}
     )
 
-    # Create all tables
-    Base.metadata.create_all(bind=engine)
-    logger.info("Database tables created successfully")
+    # Note: We no longer use create_all here as we're using Alembic for migrations
+    # Base.metadata.create_all(bind=engine)
+    # logger.info("Database tables created successfully")
 
     # Create session factory
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -43,3 +44,7 @@ def init_db() -> None:
     with SessionLocal() as db:
         # Add any initial data setup here
         pass 
+
+# Initialize Alembic
+import alembic.config
+alembic.config.main(argv=['init', 'alembic'])
